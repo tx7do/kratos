@@ -79,8 +79,8 @@ func TestLogger(t *testing.T) {
 	o := &options{}
 	v := xlog.NewStdLogger(log.Writer())
 	Logger(v)(o)
-	if !reflect.DeepEqual(xlog.NewHelper(v), o.logger) {
-		t.Fatalf("o.logger:%s is not equal to xlog.NewHelper(v):%s", o.logger, xlog.NewHelper(v))
+	if !reflect.DeepEqual(v, o.logger) {
+		t.Fatalf("o.logger:%v is not equal to xlog.NewHelper(v):%v", o.logger, xlog.NewHelper(v))
 	}
 }
 

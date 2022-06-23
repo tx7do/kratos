@@ -13,7 +13,6 @@ import (
 
 	"github.com/go-kratos/kratos/v2/errors"
 	pb "github.com/go-kratos/kratos/v2/internal/testdata/helloworld"
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
 
@@ -157,35 +156,6 @@ func TestMiddleware(t *testing.T) {
 	}
 }
 
-type mockLogger struct {
-	level log.Level
-	key   string
-	val   string
-}
-
-func (l *mockLogger) Log(level log.Level, keyvals ...interface{}) error {
-	l.level = level
-	l.key = keyvals[0].(string)
-	l.val = keyvals[1].(string)
-	return nil
-}
-
-func TestLogger(t *testing.T) {
-	o := &Server{}
-	v := &mockLogger{}
-	Logger(v)(o)
-	o.log.Log(log.LevelWarn, "foo", "bar")
-	if !reflect.DeepEqual("foo", v.key) {
-		t.Errorf("expect %s, got %s", "foo", v.key)
-	}
-	if !reflect.DeepEqual("bar", v.val) {
-		t.Errorf("expect %s, got %s", "bar", v.val)
-	}
-	if !reflect.DeepEqual(log.LevelWarn, v.level) {
-		t.Errorf("expect %s, got %s", log.LevelWarn, v.level)
-	}
-}
-
 func TestTLSConfig(t *testing.T) {
 	o := &Server{}
 	v := &tls.Config{}
@@ -211,7 +181,7 @@ func TestUnaryInterceptor(t *testing.T) {
 	}
 }
 
-func TestStramInterceptor(t *testing.T) {
+func TestStreamInterceptor(t *testing.T) {
 	o := &Server{}
 	v := []grpc.StreamServerInterceptor{
 		func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
